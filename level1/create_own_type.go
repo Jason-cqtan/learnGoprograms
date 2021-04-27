@@ -6,6 +6,7 @@ import "fmt"
 type cool int
 
 var jason cool
+var age int
 
 func main() {
 	fmt.Println(jason)
@@ -13,4 +14,8 @@ func main() {
 
 	jason = 18
 	fmt.Println(jason)
+
+	age = int(jason)
+	fmt.Println(age)
+	fmt.Printf("%T\n", age)
 }
