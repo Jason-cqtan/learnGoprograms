@@ -39,7 +39,6 @@ func main() {
 		fmt.Println(i, <-f)
 	}
 
-
 	fmt.Println("ROUTINES", runtime.NumGoroutine())
 	fmt.Println("exit")
 

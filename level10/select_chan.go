@@ -3,35 +3,43 @@ package main
 import "fmt"
 
 func main() {
-	q := make(chan int)
-	cs := send(q)
+	q := make(chan bool)
+	odd := make(chan int)
+	even := make(chan int)
 
-	receive2(cs, q)
+	// 发送
+	send(even, odd, q)
+
+	// 接收
+	receive2(even, odd, q)
 
 	fmt.Println("exit")
 }
 
-func receive2(c, q <-chan int) {
+func receive2(even, odd <-chan int, quit <-chan bool) {
 	for {
 		select {
-		case v := <-c:
-			fmt.Println(v)
-		case <-q:
+		case v := <-even:
+			fmt.Println(`偶数`, v)
+		case v := <-odd:
+			fmt.Println(`奇数`, v)
+		case <-quit:
 			return
 		}
-
 	}
 }
 
-func send(q chan<- int) <-chan int {
-	c := make(chan int)
+func send(even, odd chan<- int, q chan<- bool) {
 	go func() {
 		for i := 0; i < 10; i++ {
-			c <- i
+			if i%2 == 0 {
+				even <- i
+			} else {
+				odd <- i
+			}
 		}
-		q <- 1
-		close(c)
+		q <- true
+		close(even)
+		close(odd)
 	}()
-
-	return c
 }
